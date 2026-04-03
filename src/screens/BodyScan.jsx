@@ -69,7 +69,14 @@ export default function BodyScan() {
       img.src = previewUrl;
       await img.decode();
       
-      const result = await analyzeBody(img);
+      // PRE-PROCESSING: Resize image to a reasonable size BEFORE scanning to prevent memory issues
+      // MediaPipe Pose handles better with smaller, clearer input on mobile/web.
+      const resizedForScanBase64 = await resizeImage(file, 800); 
+      const resizedImg = new Image();
+      resizedImg.src = resizedForScanBase64;
+      await resizedImg.decode();
+
+      const result = await analyzeBody(resizedImg);
       clearInterval(stepInterval);
       
       if (result.success) {
@@ -85,8 +92,9 @@ export default function BodyScan() {
         setScanning(false);
       }
     } catch (err) {
-      console.error("Scan failed:", err);
-      alert("Scan failed. Ensure you are well-lit and standing fully in frame.");
+      console.error("Scan failed detailed error:", err);
+      const errorMessage = err?.message || "Scan failed. Ensure you are well-lit and standing fully in frame.";
+      alert(errorMessage);
       setScanning(false);
       clearInterval(stepInterval);
     }

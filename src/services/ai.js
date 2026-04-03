@@ -19,12 +19,14 @@ const getPose = async () => {
 
   poseInstance = new Pose({
     locateFile: (file) => {
-      return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+      // Use the exact version from package.json to ensure compatibility between JS and WASM
+      const version = "0.5.1675469404";
+      return `https://cdn.jsdelivr.net/npm/@mediapipe/pose@${version}/${file}`;
     },
   });
 
   poseInstance.setOptions({
-    modelComplexity: 1, // Reduced for speed, still accurate for body scanning
+    modelComplexity: 1, 
     smoothLandmarks: true,
     enableSegmentation: true,
     smoothSegmentation: true,
