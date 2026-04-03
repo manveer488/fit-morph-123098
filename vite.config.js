@@ -14,6 +14,9 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    include: ['@mediapipe/pose', '@mediapipe/camera_utils']
+  },
   define: {
     global: 'window',
   },

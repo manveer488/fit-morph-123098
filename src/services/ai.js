@@ -1,4 +1,13 @@
-import { Pose } from '@mediapipe/pose';
+import * as mpPose from '@mediapipe/pose';
+
+// Defensive import to handle different module formats and name minification
+const Pose = mpPose.Pose || 
+             (mpPose.default && mpPose.default.Pose) || 
+             (typeof window !== 'undefined' && window.Pose);
+
+if (!Pose) {
+  console.error("Critical: MediaPipe Pose constructor not found. Imports:", mpPose);
+}
 
 // Landmark indices for MediaPipe Pose
 export const JOINTS = {
